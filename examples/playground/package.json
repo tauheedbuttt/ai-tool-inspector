@@ -1,0 +1,19 @@
+{
+  "name": "playground",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Example tools for trying out ai-tool-inspector",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/main.ts",
+    "start": "tsx src/main.ts"
+  },
+  "dependencies": {
+    "ai": "^7.0.0",
+    "ai-tool-inspector": "workspace:*",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.20.6"
+  }
+}
