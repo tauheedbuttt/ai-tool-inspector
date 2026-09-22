@@ -1,5 +1,9 @@
 # AI SDK Tool Inspector
 
+[![npm](https://img.shields.io/npm/v/ai-tool-inspector?color=7dd3a0&label=npm)](https://www.npmjs.com/package/ai-tool-inspector)
+[![CI](https://github.com/tauheedbuttt/ai-tool-inspector/actions/workflows/ci.yml/badge.svg)](https://github.com/tauheedbuttt/ai-tool-inspector/actions/workflows/ci.yml)
+[![license](https://img.shields.io/npm/l/ai-tool-inspector?color=7dd3a0)](LICENSE)
+
 A tiny local browser inspector for manually executing [Vercel AI SDK](https://sdk.vercel.ai) tools.
 
 No model. No agent. No `generateText`, `streamText` or `useChat`. You hand it your existing tools
