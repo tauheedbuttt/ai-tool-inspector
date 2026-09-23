@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Meta, Outcome } from "./api";
 import type { RefObject } from "react";
-import { Json, format } from "./json";
+import { format } from "./json";
+import { Clamp, Viewer } from "./tree";
 
 export interface Restored {
   input: string;
@@ -51,7 +52,11 @@ export function Panel({ meta, restored, onRun }: Props) {
     <section className="detail">
       <header>
         <h2>{meta.name}</h2>
-        {meta.description ? <p>{meta.description}</p> : null}
+        {meta.description ? (
+          <p className="description">
+            <Clamp lines={3}>{meta.description}</Clamp>
+          </p>
+        ) : null}
         <div className="badges">
           <span className="badge">{meta.kind}</span>
           {meta.executable ? null : (
@@ -75,10 +80,7 @@ export function Panel({ meta, restored, onRun }: Props) {
 
       {meta.inputSchema ? (
         <div className="field">
-          <details className="schema">
-            <summary>Input schema</summary>
-            <Json className="output" value={meta.inputSchema} />
-          </details>
+          <Viewer label="Input schema" value={meta.inputSchema} />
         </div>
       ) : (
         <div className="field">
@@ -132,12 +134,18 @@ export function Panel({ meta, restored, onRun }: Props) {
         </div>
       </div>
 
-      {outcome ? <Result outcome={outcome} anchor={resultRef} /> : null}
+      {outcome ? <Result outcome={outcome} args={args(input)} anchor={resultRef} /> : null}
     </section>
   );
 }
 
-function Result({ outcome, anchor }: { outcome: Outcome; anchor: RefObject<HTMLDivElement | null> }) {
+interface ResultProps {
+  outcome: Outcome;
+  args: unknown;
+  anchor: RefObject<HTMLDivElement | null>;
+}
+
+function Result({ outcome, args, anchor }: ResultProps) {
   return (
     <div className="field" ref={anchor}>
       <div className="field-head">
@@ -147,7 +155,8 @@ function Result({ outcome, anchor }: { outcome: Outcome; anchor: RefObject<HTMLD
       {outcome.success ? (
         <>
           <p className="status">✓ Completed in {outcome.durationMs}ms</p>
-          <Json className="output" value={outcome.result} />
+          <Viewer label="Input" value={args} />
+          <Viewer label="Output" value={outcome.result} />
         </>
       ) : (
         <>
@@ -182,6 +191,14 @@ function headline(kind: string): string {
       return "Tool cannot be executed";
     default:
       return "Tool execution failed";
+  }
+}
+
+function args(text: string): unknown {
+  try {
+    return JSON.parse(text.trim() === "" ? "{}" : text);
+  } catch {
+    return {};
   }
 }
 
